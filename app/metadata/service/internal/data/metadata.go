@@ -7,12 +7,14 @@ import (
 	"github.com/kwstars/film-hive/app/metadata/service/internal/biz"
 )
 
-type accountRepo struct {
+
+type metadataRepo struct {
 	data *Data
 	log  *log.Helper
 }
 
-func (a *accountRepo) GetMetadata(ctx context.Context, id string) (data *biz.Metadata, err error) {
+
+func (a *metadataRepo) GetMetadata(ctx context.Context, id string) (data *biz.Metadata, err error) {
 	a.data.mutex.RLock()
 	defer a.data.mutex.RUnlock()
 	if metadata, ok := a.data.metaData[id]; ok {
@@ -29,7 +31,7 @@ func (a *accountRepo) GetMetadata(ctx context.Context, id string) (data *biz.Met
 
 // NewMetadataRepo .
 func NewMetadataRepo(data *Data, logger log.Logger) biz.MetadataRepo {
-	return &accountRepo{
+	return &metadataRepo{
 		data: data,
 		log:  log.NewHelper(logger),
 	}

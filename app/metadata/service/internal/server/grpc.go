@@ -14,7 +14,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Bootstrap, account *service.MetadataService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Bootstrap, metadata *service.MetadataService, logger log.Logger) *grpc.Server {
 	opts := []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -35,6 +35,6 @@ func NewGRPCServer(c *conf.Bootstrap, account *service.MetadataService, logger l
 	}
 	srv := grpc.NewServer(opts...)
 	// v1.RegisterGreeterServer(srv, metadata)
-	v1.RegisterMetadataServiceServer(srv, account)
+	v1.RegisterMetadataServiceServer(srv, metadata)
 	return srv
 }

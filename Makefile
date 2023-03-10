@@ -30,9 +30,7 @@ else
 endif
 
 .PHONY: api
-# generate api
-#api:
-#	find app -type d -depth 2 -print | xargs -L 1 bash -c 'cd "$$0" && pwd && $(MAKE) api'
+# generate api、http、grpc、error、swagger
 api:
 	protoc --proto_path=./api \
 		   --proto_path=./third_party \
@@ -43,17 +41,8 @@ api:
 		   --openapiv2_out=:./api \
 		   --openapiv2_opt logtostderr=true \
 		   --openapiv2_opt json_names_for_fields=false \
+		   --go-errors_out=paths=source_relative:./api \
 		  $(API_PROTO_FILES)
-#
-
-.PHONY: errors
-# generate errors code
-errors:
-	protoc --proto_path=./api \
-		   --proto_path=./third_party \
-           --go_out=paths=source_relative:./api \
-           --go-errors_out=paths=source_relative:./api \
-           $(API_ERROR_PROTO_FILES)
 
 .PHONY: buf
 # https://docs.buf.build/lint/usage#copy --error-format=config-ignore-yaml
@@ -82,3 +71,8 @@ all:
 	make generate;
 	make api;
 	make errors;
+
+.PHONY: wire
+# generate wire
+wire:
+	find app -maxdepth 2 -mindepth 2 -type d -print | xargs -L 1 bash -c 'cd "$$0" && pwd && $(MAKE) wire'

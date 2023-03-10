@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/kwstars/film-hive/app/metadata/service/internal/conf"
+	"github.com/kwstars/film-hive/app/rating/service/internal/conf"
 
 	nacosClients "github.com/nacos-group/nacos-sdk-go/clients"
 	nacosConstant "github.com/nacos-group/nacos-sdk-go/common/constant"
@@ -32,7 +32,7 @@ import (
 // go build -ldflags "-X main.Version=x.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name = "metadata"
+	Name = "rating"
 	// Version is the version of the compiled software.
 	Version string
 	// flagconf is the config flag.

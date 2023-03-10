@@ -8,5 +8,8 @@ lint:
   ignore_only:
     ENUM_ZERO_VALUE_SUFFIX:
       - metadata/service/v1/metadata_error.proto
+      - rating/service/v1/rating_error.proto
     ENUM_VALUE_PREFIX:
       - metadata/service/v1/metadata_error.proto
+      - rating/service/v1/rating_error.proto
+

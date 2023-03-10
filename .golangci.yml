@@ -25,13 +25,14 @@ linters:
     - prealloc
     - revive
     - staticcheck
-#    - structcheck
+    #    - structcheck
     - typecheck
     - unused
-#    - varcheck
+    #    - varcheck
     - whitespace
-#    - wastedassign
+    #    - wastedassign
     - unconvert
+    - exportloopref
 
   # don't enable:
   # - asciicheck

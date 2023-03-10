@@ -75,12 +75,10 @@ lint-fix:
 generate:
 	go generate ./...
 
-.PHONY: wire
-# generate wire
-wire:
-	find app -type d -depth 2 -print | xargs -L 1 bash -c 'cd "$$0" && pwd && $(MAKE) wire'
-
-.PHONY: proto
-# generate proto
-proto:
-	find app -type d -depth 2 -print | xargs -L 1 bash -c 'cd "$$0" && pwd && $(MAKE) proto'
+.PHONY: all
+# generate all
+all:
+	make buf;
+	make generate;
+	make api;
+	make errors;

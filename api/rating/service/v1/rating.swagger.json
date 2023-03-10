@@ -1,0 +1,146 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "rating/service/v1/rating.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "RatingService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/rating": {
+      "get": {
+        "operationId": "RatingService_GetAggregatedRating",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetAggregatedRatingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "record_type",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "record_id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "RatingService"
+        ]
+      },
+      "post": {
+        "operationId": "RatingService_CreateRating",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1CreateRatingResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1CreateRatingRequest"
+            }
+          }
+        ],
+        "tags": [
+          "RatingService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1CreateRatingRequest": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "type": "string"
+        },
+        "record_id": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "string"
+        },
+        "rating_value": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "v1CreateRatingResponse": {
+      "type": "object"
+    },
+    "v1GetAggregatedRatingResponse": {
+      "type": "object",
+      "properties": {
+        "avg_rating": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    }
+  }
+}

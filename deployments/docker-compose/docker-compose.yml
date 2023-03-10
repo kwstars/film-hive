@@ -1,0 +1,145 @@
+version: "3"
+
+services:
+  zookeeper:
+    container_name: zookeeper
+    image: bitnami/zookeeper:3.8
+    restart: always
+    ports:
+      - "2181:2181"
+    volumes:
+      - "zookeeper_data:/bitnami"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka:
+    container_name: kafka
+    image: bitnami/kafka:3.4
+    restart: always
+    ports:
+      - "9092:9092"
+    volumes:
+      - "kafka_data:/bitnami"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://10.0.0.130:9092 # 宿主机器的IP
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+
+  kafdrop:
+    container_name: kafdrop
+    image: obsidiandynamics/kafdrop
+    restart: always
+    ports:
+      - "9000:9000"
+    environment:
+      TZ: "Asia/Shanghai"
+      KAFKA_BROKERCONNECT: "kafka:9092"
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+    depends_on:
+      - kafka
+
+  redis:
+    container_name: redis
+    image: redis:6
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - "redis_data:/data:rw"
+    command:
+      [
+        "redis-server",
+        "--appendonly yes",
+        "--maxmemory 1G",
+        "--requirepass 123456",
+        "--maxmemory-policy volatile-lru"
+      ]
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 3
+
+  mysql:
+    container_name: mysql
+    image: mariadb:10.6
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - 'mysql_data:/var/lib/mysql:rw'
+      - '${PWD}/mysql:/docker-entrypoint-initdb.d'
+    environment:
+      MYSQL_ROOT_PASSWORD: "mysql"
+      TZ: "Asia/Shanghai"
+      MYSQL_DATABASE: movie
+      MYSQL_USER: movie
+      MYSQL_PASSWORD: "MA126@root"
+    command:
+      [
+        "--default_storage_engine=InnoDB",
+        "--character_set_server=utf8mb4",
+        "--collation_server=utf8mb4_general_ci",
+        "--log_bin=1", # binlog,
+        "--innodb_flush_log_at_trx_commit=1", # redolog
+        "--slow_query_log=1",
+        "--long_query_time=3",
+        "--general_log=on", # 测试环境开启用于Debug
+        "--max_statement_time=10000", # MySQL8中是max_execution_time,默认是0
+        "--innodb_undo_tablespaces=2", # 默认是0
+        "--autocommit=1", # 如何 set autocommit=0 这个事务持续存在直到你主动执行 commit 或 rollback 语句，或者断开连接。
+        "--innodb_change_buffer_max_size=50", # 默认25
+        "--innodb_io_capacity=200",  # 默认是200 https://dev.mysql.com/doc/refman/8.0/en/innodb-configuring-io-capacity.html
+        "--sync_binlog=100"
+      ]
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+
+  nacos:
+    image: nacos/nacos-server:v2.2.0
+    container_name: nacos
+    restart: always
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=mysql
+      - MYSQL_SERVICE_DB_NAME=nacos
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=mysql
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+    volumes:
+      - /tmp/standalone-logs/:/home/nacos/logs
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9555:9555"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.42
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+      - "14268:14268"
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+      - LOG_LEVEL=debug
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: local
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package metadata.service.v1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+option go_package = "api/metadata/service/v1;v1";
+
+service MetadataService {
+  rpc GetMetadata (GetMetadataRequest) returns (GetMetadataResponse) {
+    option (google.api.http) = {
+      get: "/metadata/{id}"
+    };
+  }
+}
+
+message GetMetadataRequest {
+  string id = 1 [(validate.rules).string.min_len = 5];
+}
+
+message GetMetadataResponse {
+  string id = 1;
+  string title = 2;
+  string description = 3;
+  string director = 4;
+}

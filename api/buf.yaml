@@ -1,0 +1,12 @@
+version: v1
+breaking:
+  use:
+    - FILE
+lint:
+  use:
+    - DEFAULT
+  ignore_only:
+    ENUM_ZERO_VALUE_SUFFIX:
+      - metadata/service/v1/metadata_error.proto
+    ENUM_VALUE_PREFIX:
+      - metadata/service/v1/metadata_error.proto

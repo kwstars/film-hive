@@ -1,0 +1,7 @@
+version: v1
+lint:
+  ignore:
+    - google
+    - validate
+    - openapi
+    - errors

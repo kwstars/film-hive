@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-deployment
+  labels:
+    app.kubernetes.io/name: my-app
+spec:
+  replicas: 3 # 指定应用于该部署部分的pod副本数
+  selector: # 定义如何匹配此Deployment使用的Pod
+    matchLabels:
+      app.kubernetes.io/name: my-app
+      tier: backend
+  strategy:
+    type: RollingUpdate          # 更新策略为滚动升级
+    rollingUpdate:
+      maxUnavailable: 1          # 滚动升级过程中最多有 1 个 Pod 不可用
+      maxSurge: 1                # 最多可以多出 1 个 Pod
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: my-app
+        tier: backend
+    spec:
+      containers:
+        - name: my-app-container
+          image: my-app-image:v1.0
+          resources: # 对容器进行资源限制
+            limits:
+              cpu: "1"
+              memory: "2Gi"
+            requests:
+              cpu: "0.5"
+              memory: "1Gi"
+          ports: # 在容器内暴露的端口
+            - containerPort: 8080
+          livenessProbe: # 配置用于在运行时监视容器是否已启动并正在运行的探针
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 10  # 启动后 n 秒进行第一次检查
+            periodSeconds: 5  # 每隔 n 秒进行一次检查
+          readinessProbe: # 配置用于确定容器是否已成功启动的探针
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 15
+            timeoutSeconds: 2

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: example-service
+  namespace: default
+  labels:
+    app: example # 定义标签标识此service属于哪个应用
+spec:
+  selector:
+    app: example     # 指定对哪个selector的pod匹配服务（必传），这里与deployment或statefulset中的label设置的一致。
+  ports:
+    - name: http      # 服务暴露的端口名，可自定义
+      port: 80       # Service开放的服务端口，它可以是任意的数字，只需要确保不和其他端口号冲突即可，服务内部定位这个端口
+      targetPort: 8080 # 容器内运行的程序监听的端口号，与Deployment.metadata.labels下的 pod中container的ports.port选择的值相同就可以与targetPod关联。
+      protocol: TCP   # 描述此端口的传输协议，"TCP" 或 "UDP"
+  type: ClusterIP     # Service 有三种类型：ClusterIP, NodePort 和 LoadBalancer
+  sessionAffinity: None # 用户请求发送到一台 Pod 后，如果可能，会希望多次请求都发送到同一台 Pod 上。默认为空，会进行轮询
+  externalTrafficPolicy: Cluster # externalTrafficPolicy 指定了外部流量访问 Service 时的代理模式，其取值可以是 Local 或 Cluster

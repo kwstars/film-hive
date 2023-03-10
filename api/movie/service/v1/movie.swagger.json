@@ -1,0 +1,109 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "movie/service/v1/movie.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "MovieService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/movie": {
+      "get": {
+        "operationId": "MovieService_GetMovieDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1GetMovieDetailResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "MovieService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "GetMovieDetailResponseMetadata": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "director": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1GetMovieDetailResponse": {
+      "type": "object",
+      "properties": {
+        "rating": {
+          "type": "number",
+          "format": "double"
+        },
+        "metadata": {
+          "$ref": "#/definitions/GetMovieDetailResponseMetadata"
+        }
+      }
+    }
+  }
+}

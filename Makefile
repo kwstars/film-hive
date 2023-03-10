@@ -70,7 +70,6 @@ all:
 	make buf;
 	make generate;
 	make api;
-	make errors;
 
 .PHONY: wire
 # generate wire

@@ -13,7 +13,6 @@ import (
 	"github.com/kwstars/film-hive/app/movie/service/internal/data"
 	"github.com/kwstars/film-hive/app/movie/service/internal/server"
 	"github.com/kwstars/film-hive/app/movie/service/internal/service"
-	"go.opentelemetry.io/otel/sdk/trace"
 )
 
 import (
@@ -23,25 +22,40 @@ import (
 // Injectors from wire.go:
 
 // initApp init kratos application.
-func initApp(bootstrap *conf.Bootstrap, tp *trace.TracerProvider) (*kratos.App, func(), error) {
+func initApp(bootstrap *conf.Bootstrap) (*kratos.App, func(), error) {
 	logger, cleanup := server.NewLogger()
 	iNamingClient, err := server.NewNamingClient(bootstrap)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	dataData, cleanup2, err := data.NewData(bootstrap, logger)
+	ratingServiceClient, cleanup2, err := service.NewRatingGRPCClient(bootstrap, iNamingClient)
 	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	metadataServiceClient, cleanup3, err := service.NewMetadataGRPCClient(bootstrap, iNamingClient)
+	if err != nil {
+		cleanup2()
+		cleanup()
+		return nil, nil, err
+	}
+	dataData, cleanup4, err := data.NewData(bootstrap, logger)
+	if err != nil {
+		cleanup3()
+		cleanup2()
 		cleanup()
 		return nil, nil, err
 	}
 	movieRepo := data.NewMovieRepo(dataData, logger)
 	movieUsecase := biz.NewMovieUsecase(movieRepo, logger)
-	movieService := service.NewMovieService(bootstrap, iNamingClient, movieUsecase)
+	movieService := service.NewMovieService(ratingServiceClient, metadataServiceClient, movieUsecase)
 	grpcServer := server.NewGRPCServer(bootstrap, movieService, logger)
 	httpServer := server.NewHTTPServer(bootstrap, movieService, logger)
 	app := newApp(logger, iNamingClient, grpcServer, httpServer)
 	return app, func() {
+		cleanup4()
+		cleanup3()
 		cleanup2()
 		cleanup()
 	}, nil

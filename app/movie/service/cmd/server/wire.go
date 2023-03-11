@@ -12,13 +12,11 @@ import (
 	"github.com/kwstars/film-hive/app/movie/service/internal/server"
 	"github.com/kwstars/film-hive/app/movie/service/internal/service"
 
-	"github.com/google/wire"
-	"go.opentelemetry.io/otel/sdk/trace"
-
 	"github.com/go-kratos/kratos/v2"
+	"github.com/google/wire"
 )
 
 // initApp init kratos application.
-func initApp(bootstrap *conf.Bootstrap, tp *trace.TracerProvider) (*kratos.App, func(), error) {
+func initApp(bootstrap *conf.Bootstrap) (*kratos.App, func(), error) {
 	panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
 }

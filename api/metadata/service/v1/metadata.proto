@@ -16,7 +16,7 @@ service MetadataService {
 }
 
 message GetMetadataRequest {
-  string id = 1 [(validate.rules).string.min_len = 5];
+  string id = 1 [(validate.rules).string.min_len = 0];
 }
 
 message GetMetadataResponse {

@@ -6,10 +6,7 @@ import (
 	v1 "github.com/kwstars/film-hive/api/movie/service/v1"
 	rating "github.com/kwstars/film-hive/api/rating/service/v1"
 	"github.com/kwstars/film-hive/app/movie/service/internal/biz"
-	"github.com/kwstars/film-hive/app/movie/service/internal/conf"
-	"github.com/nacos-group/nacos-sdk-go/clients/naming_client"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
+	"golang.org/x/sync/errgroup"
 )
 
 var _ v1.MovieServiceServer = (*MovieService)(nil)
@@ -21,24 +18,45 @@ type MovieService struct {
 	metadata metadata.MetadataServiceClient
 }
 
-func NewMovieService(c *conf.Bootstrap, rc naming_client.INamingClient, uc *biz.MovieUsecase) *MovieService {
+func NewMovieService(rc rating.RatingServiceClient, mc metadata.MetadataServiceClient, uc *biz.MovieUsecase) *MovieService {
 	return &MovieService{
 		uc:       uc,
-		rating:   newRatingClient(c, rc),
-		metadata: newMetadataClient(c, rc),
+		rating:   rc,
+		metadata: mc,
 	}
 }
 
 func (m *MovieService) GetMovieDetail(ctx context.Context, req *v1.GetMovieDetailRequest) (resp *v1.GetMovieDetailResponse, err error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetMovieDetail not implemented")
-}
+	var (
+		ratingResp   *rating.GetAggregatedRatingResponse
+		meatdataResp *metadata.GetMetadataResponse
+	)
 
-func (m *MovieService) GetAggregatedRating(ctx context.Context, in *rating.GetAggregatedRatingRequest) (*rating.GetAggregatedRatingResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
+	eg := new(errgroup.Group)
+	eg.Go(func() (err error) {
+		if ratingResp, err = m.rating.GetAggregatedRating(ctx, &rating.GetAggregatedRatingRequest{RecordType: "1", RecordId: req.GetId()}); err != nil {
+			return err
+		}
+		return nil
+	})
+	eg.Go(func() error {
+		if meatdataResp, err = m.metadata.GetMetadata(ctx, &metadata.GetMetadataRequest{Id: req.GetId()}); err != nil {
+			return err
+		}
+		return nil
+	})
+	if err = eg.Wait(); err != nil {
+		return
+	}
 
-func (m *MovieService) CreateRating(ctx context.Context, in *rating.CreateRatingRequest) (*rating.CreateRatingResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	resp = &v1.GetMovieDetailResponse{
+		Rating: ratingResp.GetAvgRating(),
+		Metadata: &v1.GetMovieDetailResponse_Metadata{
+			Id:          meatdataResp.Id,
+			Title:       meatdataResp.Title,
+			Description: meatdataResp.Description,
+			Director:    meatdataResp.Director,
+		},
+	}
+	return
 }

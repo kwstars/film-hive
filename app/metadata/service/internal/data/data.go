@@ -20,8 +20,8 @@ type Data struct {
 // NewData .
 func NewData(c *conf.Bootstrap, _ log.Logger) (data *Data, closer func(), err error) {
 	d := map[string]*Metadata{
-		"111111": {"11111", "11111", "11111", "11111"},
-		"222222": {"222222", "222222", "222222", "222222"},
+		"1": {"1", "1", "1", "1"},
+		"2": {"2", "2", "2", "2"},
 	}
 
 	return &Data{

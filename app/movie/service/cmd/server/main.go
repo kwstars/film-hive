@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"fmt"
 	"github.com/go-kratos/kratos/contrib/registry/nacos/v2"
@@ -57,56 +56,18 @@ func newApp(logger log.Logger, rc naming_client.INamingClient, gs *grpc.Server, 
 			hs,
 		),
 		kratos.Registrar(nacos.New(rc)),
-		kratos.BeforeStart(func(ctx context.Context) error {
-			log.Info("Before Start")
-			return nil
-		}),
-		kratos.BeforeStop(func(ctx context.Context) error {
-			log.Info("Before Stop")
-			return nil
-		}),
-		kratos.AfterStop(func(ctx context.Context) error {
-			log.Info("After Stop")
-			return nil
-		}),
-		//kratos.AfterStart(func(ctx context.Context) error {
-		//	log.Info("start connecting to the rating")
-		//	if conn, err := grpc.DialInsecure(
-		//		context.Background(),
-		//		grpc.WithEndpoint("discovery:///rating.grpc"),
-		//		grpc.WithDiscovery(nacos.New(rc)),
-		//	); err != nil {
-		//		return err
-		//	} else {
-		//		_ = rating.NewRatingServiceClient(conn)
-		//	}
-		//	return nil
-		//}),
-		//kratos.AfterStart(func(ctx context.Context) error {
-		//	log.Info("start connecting to the metadata")
-		//	if conn, err := grpc.DialInsecure(
-		//		context.Background(),
-		//		grpc.WithEndpoint("discovery:///metadata.grpc"),
-		//		grpc.WithDiscovery(nacos.New(rc)),
-		//	); err != nil {
-		//		return err
-		//	} else {
-		//		_ = metadata.NewMetadataClient(conn)
-		//	}
-		//	return nil
-		//}),
 	)
 }
 
-// setTracerProvider 设置trace
-func setTracerProvider(c *conf.Trace) (tp *tracesdk.TracerProvider, err error) {
+// initTracerProvider 设置trace
+func initTracerProvider(c *conf.Trace) (err error) {
 	// Create the Jaeger exporter
 	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(c.Endpoint)))
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	tp = tracesdk.NewTracerProvider(
+	tp := tracesdk.NewTracerProvider(
 		// Set the sampling rate based on the parent span to 100%
 		tracesdk.WithSampler(tracesdk.ParentBased(tracesdk.TraceIDRatioBased(1.0))),
 		// Always be sure to batch in production.
@@ -161,7 +122,6 @@ func main() {
 	flag.Parse()
 	var (
 		bc  conf.Bootstrap
-		tp  *tracesdk.TracerProvider
 		err error
 	)
 
@@ -188,12 +148,12 @@ func main() {
 		panic(err)
 	}
 
-	tp, err = setTracerProvider(bc.Trace)
+	err = initTracerProvider(bc.Trace)
 	if err != nil {
 		panic(err)
 	}
 
-	app, cleanup, err := initApp(&bc, tp)
+	app, cleanup, err := initApp(&bc)
 	if err != nil {
 		panic(err)
 	}

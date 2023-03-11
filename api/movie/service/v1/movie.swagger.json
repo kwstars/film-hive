@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/movie": {
+    "/movie/{id}": {
       "get": {
         "operationId": "MovieService_GetMovieDetail",
         "responses": {
@@ -36,8 +36,8 @@
         "parameters": [
           {
             "name": "id",
-            "in": "query",
-            "required": false,
+            "in": "path",
+            "required": true,
             "type": "string"
           }
         ],

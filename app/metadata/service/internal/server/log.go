@@ -13,19 +13,20 @@ var _ log.Logger = (*ZapLogger)(nil)
 
 // ZapLogger is a logger impl.
 type ZapLogger struct {
-	log  *zap.Logger
-	Sync func() error
+	log *zap.Logger
 }
 
 // NewZapLogger return a zap logger.
-func newZapLogger(encoder zapcore.EncoderConfig, level zap.AtomicLevel, opts ...zap.Option) *ZapLogger {
+func newZapLogger(encoder zapcore.EncoderConfig, level zap.AtomicLevel, opts ...zap.Option) (*ZapLogger, func()) {
 	core := zapcore.NewCore(
 		zapcore.NewConsoleEncoder(encoder),
 		zapcore.NewMultiWriteSyncer(
 			zapcore.AddSync(os.Stdout),
 		), level)
 	zapLogger := zap.New(core, opts...)
-	return &ZapLogger{log: zapLogger, Sync: zapLogger.Sync}
+	return &ZapLogger{log: zapLogger}, func() {
+		_ = zapLogger.Sync()
+	}
 }
 
 // Log Implementation of logger interface.
@@ -51,14 +52,7 @@ func (l *ZapLogger) Log(level log.Level, keyvals ...interface{}) error {
 	}
 	return nil
 }
-
-func NewLogger() log.Logger {
-	//logger := log.With(log.NewStdLogger(os.Stdout),
-	//	"service.name", Name,
-	//	"service.version", Version,
-	//	"ts", log.DefaultTimestamp,
-	//	"caller", log.DefaultCaller,
-	//)
+func NewLogger() (log.Logger, func()) {
 	encoder := zapcore.EncoderConfig{
 		TimeKey:        "t",
 		LevelKey:       "level",
@@ -72,7 +66,7 @@ func NewLogger() log.Logger {
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.FullCallerEncoder,
 	}
-	logger := newZapLogger(
+	return newZapLogger(
 		encoder,
 		zap.NewAtomicLevelAt(zapcore.DebugLevel),
 		zap.AddStacktrace(zap.NewAtomicLevelAt(zapcore.ErrorLevel)),
@@ -80,5 +74,4 @@ func NewLogger() log.Logger {
 		zap.AddCallerSkip(2),
 		zap.Development(),
 	)
-	return logger
 }

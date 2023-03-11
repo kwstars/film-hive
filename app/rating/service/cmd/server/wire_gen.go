@@ -24,13 +24,15 @@ import (
 
 // initApp init kratos application.
 func initApp(bootstrap *conf.Bootstrap, tp *trace.TracerProvider) (*kratos.App, func(), error) {
-	logger := server.NewLogger()
+	logger, cleanup := server.NewLogger()
 	registrar, err := server.NewNamingClient(bootstrap)
 	if err != nil {
+		cleanup()
 		return nil, nil, err
 	}
-	dataData, cleanup, err := data.NewData(bootstrap, logger)
+	dataData, cleanup2, err := data.NewData(bootstrap, logger)
 	if err != nil {
+		cleanup()
 		return nil, nil, err
 	}
 	ratingRepo := data.NewRatingRepo(dataData, logger)
@@ -40,6 +42,7 @@ func initApp(bootstrap *conf.Bootstrap, tp *trace.TracerProvider) (*kratos.App, 
 	httpServer := server.NewHTTPServer(bootstrap, ratingService, logger)
 	app := newApp(logger, registrar, grpcServer, httpServer)
 	return app, func() {
+		cleanup2()
 		cleanup()
 	}, nil
 }

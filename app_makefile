@@ -6,7 +6,8 @@ API_PROTO_FILES=$(shell cd ../../../api/$(APP_RELATIVE_PATH) && find . -name *.p
 KRATOS_VERSION=$(shell go mod graph |grep go-kratos/kratos/v2 |head -n 1 |awk -F '@' '{print $$2}')
 KRATOS=$(GOPATH)/pkg/mod/github.com/go-kratos/kratos/v2@$(KRATOS_VERSION)
 APP_NAME=$(shell echo $(APP_RELATIVE_PATH) | sed -En "s/\//-/p")
-DOCKER_IMAGE=$(shell echo $(APP_NAME) |awk -F '@' '{print "registry.cn-hangzhou.aliyuncs.com/ms-game-dev/" $$0 ":0.1.0"}')
+DOCKER_REGISTER=kwstars
+DOCKER_IMAGE=$(shell echo $(APP_NAME) |awk -F '@' '{print "${DOCKER_REGISTER}/" $$0 ":${VERSION}"}')
 
 .PHONY: init
 # init env
@@ -87,6 +88,9 @@ ent:
 .PHONY: docker
 docker:
 	cd ../../.. && docker build -f deployments/build/Dockerfile --build-arg APP_RELATIVE_PATH=$(APP_RELATIVE_PATH) -t $(DOCKER_IMAGE) .
+	docker image tag ${DOCKER_REGISTER}/${APP_NAME}:${VERSION} ${DOCKER_REGISTER}/${APP_NAME}:latest
+	docker push ${DOCKER_REGISTER}/${APP_NAME}:${VERSION}
+	docker push ${DOCKER_REGISTER}/${APP_NAME}:latest
 
 .PHONY: wire
 # generate wire

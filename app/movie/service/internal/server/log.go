@@ -52,6 +52,7 @@ func (l *ZapLogger) Log(level log.Level, keyvals ...interface{}) error {
 	}
 	return nil
 }
+
 func NewLogger() (log.Logger, func()) {
 	encoder := zapcore.EncoderConfig{
 		TimeKey:        "t",

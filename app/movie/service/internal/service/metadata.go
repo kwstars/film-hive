@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"time"
+
 	"github.com/go-kratos/kratos/contrib/registry/nacos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
@@ -9,7 +11,6 @@ import (
 	metadata "github.com/kwstars/film-hive/api/metadata/service/v1"
 	"github.com/kwstars/film-hive/app/movie/service/internal/conf"
 	"github.com/nacos-group/nacos-sdk-go/clients/naming_client"
-	"time"
 )
 
 func NewMetadataGRPCClient(c *conf.Bootstrap, rc naming_client.INamingClient) (metadata.MetadataServiceClient, func(), error) {

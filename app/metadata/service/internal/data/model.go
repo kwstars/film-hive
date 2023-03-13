@@ -9,6 +9,7 @@ var Tables = []any{
 const (
 	RedisDefaultExpire = 8 * time.Hour
 )
+
 const (
 	MetadataStringKey string = "md"
 )

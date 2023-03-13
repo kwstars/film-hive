@@ -2,15 +2,15 @@ package data
 
 import (
 	"context"
-	"github.com/go-redis/cache/v9"
-	"github.com/golang/protobuf/proto"
-	v1 "github.com/kwstars/film-hive/api/rating/service/v1"
-	"github.com/pkg/errors"
-	"gorm.io/gorm"
 	"strconv"
 
 	"github.com/go-kratos/kratos/v2/log"
+	"github.com/go-redis/cache/v9"
+	v1 "github.com/kwstars/film-hive/api/rating/service/v1"
 	"github.com/kwstars/film-hive/app/rating/service/internal/biz"
+	"github.com/pkg/errors"
+	"google.golang.org/protobuf/proto"
+	"gorm.io/gorm"
 )
 
 type ratingRepo struct {
@@ -21,7 +21,7 @@ type ratingRepo struct {
 // ListRatings TODO
 func (r *ratingRepo) ListRatings(ctx context.Context, recordType, recordID uint64) (rs []uint32, err error) {
 	key := RatingStringKey + ":" + strconv.FormatUint(recordType, 10) + ":" + strconv.FormatUint(recordID, 10)
-	var ratings = []Rating{}
+	ratings := []Rating{}
 	rs = []uint32{}
 	if err = r.data.cache.Once(&cache.Item{
 		Ctx:   ctx,

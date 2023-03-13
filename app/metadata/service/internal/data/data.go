@@ -3,6 +3,8 @@ package data
 import (
 	"database/sql"
 	"fmt"
+	"strings"
+
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-redis/cache/v9"
 	"github.com/go-redsync/redsync/v4"
@@ -15,7 +17,6 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/plugin/opentelemetry/tracing"
-	"strings"
 )
 
 // ProviderSet is data providers.
@@ -43,7 +44,7 @@ func NewData(c *conf.Bootstrap, logger log.Logger) (data *Data, closer func(), e
 	pool := goredis.NewPool(rdb)
 	mycache := cache.New(&cache.Options{
 		Redis: rdb,
-		//LocalCache: cache.NewTinyLFU(1000, time.Minute),
+		// LocalCache: cache.NewTinyLFU(1000, time.Minute),
 	})
 
 	if db, err = newDB(c.Data, helper); err != nil {

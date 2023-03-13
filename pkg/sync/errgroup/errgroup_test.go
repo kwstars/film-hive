@@ -51,7 +51,7 @@ func TestGOMAXPROCS(t *testing.T) {
 	g.Go(sleep1s)
 	g.Go(sleep1s)
 	g.Go(sleep1s)
-	g.Wait()
+	_ = g.Wait()
 	sec := math.Round(time.Since(now).Seconds())
 	if sec != 1 {
 		t.FailNow()
@@ -64,7 +64,7 @@ func TestGOMAXPROCS(t *testing.T) {
 	g2.Go(sleep1s)
 	g2.Go(sleep1s)
 	g2.Go(sleep1s)
-	g2.Wait()
+	_ = g2.Wait()
 	sec = math.Round(time.Since(now).Seconds())
 	if sec != 2 {
 		t.FailNow()
@@ -85,7 +85,7 @@ func TestGOMAXPROCS(t *testing.T) {
 		}
 		return nil
 	})
-	g3.Wait()
+	_ = g3.Wait()
 	if !canceled {
 		t.FailNow()
 	}
@@ -133,8 +133,10 @@ var (
 	Video = fakeSearch("video")
 )
 
-type Result string
-type Search func(ctx context.Context, query string) (Result, error)
+type (
+	Result string
+	Search func(ctx context.Context, query string) (Result, error)
+)
 
 func fakeSearch(kind string) Search {
 	return func(_ context.Context, query string) (Result, error) {
@@ -147,7 +149,7 @@ func fakeSearch(kind string) Search {
 // the sync.WaitGroup example at https://golang.org/pkg/sync/#example_WaitGroup.
 func ExampleGroup_justErrors() {
 	var g Group
-	var urls = []string{
+	urls := []string{
 		"http://www.golang.org/",
 		"http://www.google.com/",
 		"http://www.somestupidname.com/",
@@ -253,13 +255,13 @@ func TestWithCancel(t *testing.T) {
 	})
 	var doneErr error
 	g.Go(func(ctx context.Context) error {
-		select {
+		select { // nolint
 		case <-ctx.Done():
 			doneErr = ctx.Err()
 		}
 		return doneErr
 	})
-	g.Wait()
+	_ = g.Wait()
 	if doneErr != context.Canceled {
 		t.Error("error should be Canceled")
 	}

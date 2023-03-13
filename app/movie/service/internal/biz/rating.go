@@ -2,7 +2,6 @@ package biz
 
 import (
 	"context"
-	"go.uber.org/zap"
 
 	"github.com/go-kratos/kratos/v2/log"
 	v1 "github.com/kwstars/film-hive/api/movie/service/v1"
@@ -39,7 +38,7 @@ func (c *MovieUsecase) GetAggregatedMovie(ctx context.Context, recordType, recor
 	if err != nil {
 		switch {
 		case v1.IsMovieNotFound(err):
-			c.log.Errorf("GetAggregatedMovie movie not found", zap.Error(err))
+			c.log.Errorf("GetAggregatedMovie movie not found: %v", err)
 			return
 		default:
 			c.log.Errorf("ListMovie err: %v", err)

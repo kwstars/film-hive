@@ -4,6 +4,8 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"os"
+
 	"github.com/go-kratos/kratos/contrib/registry/nacos/v2"
 	"github.com/kwstars/film-hive/app/movie/service/internal/conf"
 	nacosClients "github.com/nacos-group/nacos-sdk-go/clients"
@@ -19,7 +21,6 @@ import (
 	_ "go.uber.org/automaxprocs"
 	"go.uber.org/zap"
 	"gopkg.in/yaml.v2"
-	"os"
 
 	nacosKratos "github.com/go-kratos/kratos/contrib/config/nacos/v2"
 	"github.com/go-kratos/kratos/v2"

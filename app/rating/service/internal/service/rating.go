@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	v1 "github.com/kwstars/film-hive/api/rating/service/v1"
 	"github.com/kwstars/film-hive/app/rating/service/internal/biz"
 )

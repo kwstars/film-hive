@@ -7,8 +7,6 @@ import (
 	"github.com/kwstars/film-hive/app/metadata/service/internal/biz"
 )
 
-var _ v1.MetadataServiceServer = (*MetadataService)(nil)
-
 type MetadataService struct {
 	v1.UnimplementedMetadataServiceServer
 	uc *biz.MetadataUsecase

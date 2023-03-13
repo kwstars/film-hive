@@ -9,20 +9,20 @@ option go_package = "api/movie/service/v1;v1";
 service MovieService {
   rpc GetMovieDetail (GetMovieDetailRequest) returns (GetMovieDetailResponse) {
     option (google.api.http) = {
-      get: "/movie/{id}"
+      get: "/v1/movie/{id}"
     };
   }
 }
 
 message GetMovieDetailRequest {
-  string id = 1;
+  uint64 id = 1;
 }
 
 message GetMovieDetailResponse {
   double rating = 1;
   Metadata metadata = 2;
   message Metadata {
-    string id = 1;
+    uint64 id = 1;
     string title = 2;
     string description = 3;
     string director = 4;

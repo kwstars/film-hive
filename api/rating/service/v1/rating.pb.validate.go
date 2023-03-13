@@ -35,112 +35,6 @@ var (
 	_ = sort.Sort
 )
 
-// Validate checks the field values on Rating with the rules defined in the
-// proto definition for this message. If any rules are violated, the first
-// error encountered is returned, or nil if there are no violations.
-func (m *Rating) Validate() error {
-	return m.validate(false)
-}
-
-// ValidateAll checks the field values on Rating with the rules defined in the
-// proto definition for this message. If any rules are violated, the result is
-// a list of violation errors wrapped in RatingMultiError, or nil if none found.
-func (m *Rating) ValidateAll() error {
-	return m.validate(true)
-}
-
-func (m *Rating) validate(all bool) error {
-	if m == nil {
-		return nil
-	}
-
-	var errors []error
-
-	// no validation rules for RecordType
-
-	// no validation rules for RecordId
-
-	// no validation rules for UserId
-
-	// no validation rules for RatingValue
-
-	if len(errors) > 0 {
-		return RatingMultiError(errors)
-	}
-
-	return nil
-}
-
-// RatingMultiError is an error wrapping multiple validation errors returned by
-// Rating.ValidateAll() if the designated constraints aren't met.
-type RatingMultiError []error
-
-// Error returns a concatenation of all the error messages it wraps.
-func (m RatingMultiError) Error() string {
-	var msgs []string
-	for _, err := range m {
-		msgs = append(msgs, err.Error())
-	}
-	return strings.Join(msgs, "; ")
-}
-
-// AllErrors returns a list of validation violation errors.
-func (m RatingMultiError) AllErrors() []error { return m }
-
-// RatingValidationError is the validation error returned by Rating.Validate if
-// the designated constraints aren't met.
-type RatingValidationError struct {
-	field  string
-	reason string
-	cause  error
-	key    bool
-}
-
-// Field function returns field value.
-func (e RatingValidationError) Field() string { return e.field }
-
-// Reason function returns reason value.
-func (e RatingValidationError) Reason() string { return e.reason }
-
-// Cause function returns cause value.
-func (e RatingValidationError) Cause() error { return e.cause }
-
-// Key function returns key value.
-func (e RatingValidationError) Key() bool { return e.key }
-
-// ErrorName returns error name.
-func (e RatingValidationError) ErrorName() string { return "RatingValidationError" }
-
-// Error satisfies the builtin error interface
-func (e RatingValidationError) Error() string {
-	cause := ""
-	if e.cause != nil {
-		cause = fmt.Sprintf(" | caused by: %v", e.cause)
-	}
-
-	key := ""
-	if e.key {
-		key = "key for "
-	}
-
-	return fmt.Sprintf(
-		"invalid %sRating.%s: %s%s",
-		key,
-		e.field,
-		e.reason,
-		cause)
-}
-
-var _ error = RatingValidationError{}
-
-var _ interface {
-	Field() string
-	Reason() string
-	Key() bool
-	Cause() error
-	ErrorName() string
-} = RatingValidationError{}
-
 // Validate checks the field values on GetAggregatedRatingRequest with the
 // rules defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -352,6 +246,112 @@ var _ interface {
 	ErrorName() string
 } = GetAggregatedRatingResponseValidationError{}
 
+// Validate checks the field values on Rating with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *Rating) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on Rating with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in RatingMultiError, or nil if none found.
+func (m *Rating) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *Rating) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for RecordType
+
+	// no validation rules for RecordId
+
+	// no validation rules for UserId
+
+	// no validation rules for RatingValue
+
+	if len(errors) > 0 {
+		return RatingMultiError(errors)
+	}
+
+	return nil
+}
+
+// RatingMultiError is an error wrapping multiple validation errors returned by
+// Rating.ValidateAll() if the designated constraints aren't met.
+type RatingMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m RatingMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m RatingMultiError) AllErrors() []error { return m }
+
+// RatingValidationError is the validation error returned by Rating.Validate if
+// the designated constraints aren't met.
+type RatingValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e RatingValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e RatingValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e RatingValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e RatingValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e RatingValidationError) ErrorName() string { return "RatingValidationError" }
+
+// Error satisfies the builtin error interface
+func (e RatingValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sRating.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = RatingValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = RatingValidationError{}
+
 // Validate checks the field values on CreateRatingRequest with the rules
 // defined in the proto definition for this message. If any rules are
 // violated, the first error encountered is returned, or nil if there are no violations.
@@ -374,13 +374,34 @@ func (m *CreateRatingRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for RecordType
-
-	// no validation rules for RecordId
-
-	// no validation rules for UserId
-
-	// no validation rules for RatingValue
+	if all {
+		switch v := interface{}(m.GetRating()).(type) {
+		case interface{ ValidateAll() error }:
+			if err := v.ValidateAll(); err != nil {
+				errors = append(errors, CreateRatingRequestValidationError{
+					field:  "Rating",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		case interface{ Validate() error }:
+			if err := v.Validate(); err != nil {
+				errors = append(errors, CreateRatingRequestValidationError{
+					field:  "Rating",
+					reason: "embedded message failed validation",
+					cause:  err,
+				})
+			}
+		}
+	} else if v, ok := interface{}(m.GetRating()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return CreateRatingRequestValidationError{
+				field:  "Rating",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
 
 	if len(errors) > 0 {
 		return CreateRatingRequestMultiError(errors)
@@ -563,3 +584,107 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = CreateRatingResponseValidationError{}
+
+// Validate checks the field values on PushMsg with the rules defined in the
+// proto definition for this message. If any rules are violated, the first
+// error encountered is returned, or nil if there are no violations.
+func (m *PushMsg) Validate() error {
+	return m.validate(false)
+}
+
+// ValidateAll checks the field values on PushMsg with the rules defined in the
+// proto definition for this message. If any rules are violated, the result is
+// a list of violation errors wrapped in PushMsgMultiError, or nil if none found.
+func (m *PushMsg) ValidateAll() error {
+	return m.validate(true)
+}
+
+func (m *PushMsg) validate(all bool) error {
+	if m == nil {
+		return nil
+	}
+
+	var errors []error
+
+	// no validation rules for Type
+
+	// no validation rules for Key
+
+	// no validation rules for Msg
+
+	if len(errors) > 0 {
+		return PushMsgMultiError(errors)
+	}
+
+	return nil
+}
+
+// PushMsgMultiError is an error wrapping multiple validation errors returned
+// by PushMsg.ValidateAll() if the designated constraints aren't met.
+type PushMsgMultiError []error
+
+// Error returns a concatenation of all the error messages it wraps.
+func (m PushMsgMultiError) Error() string {
+	var msgs []string
+	for _, err := range m {
+		msgs = append(msgs, err.Error())
+	}
+	return strings.Join(msgs, "; ")
+}
+
+// AllErrors returns a list of validation violation errors.
+func (m PushMsgMultiError) AllErrors() []error { return m }
+
+// PushMsgValidationError is the validation error returned by PushMsg.Validate
+// if the designated constraints aren't met.
+type PushMsgValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e PushMsgValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e PushMsgValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e PushMsgValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e PushMsgValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e PushMsgValidationError) ErrorName() string { return "PushMsgValidationError" }
+
+// Error satisfies the builtin error interface
+func (e PushMsgValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sPushMsg.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = PushMsgValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = PushMsgValidationError{}

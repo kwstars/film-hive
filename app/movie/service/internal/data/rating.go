@@ -56,6 +56,6 @@ func (r *movieRepo) CreateMovie(ctx context.Context, recordType, recordID string
 func NewMovieRepo(data *Data, logger log.Logger) biz.MovieRepo {
 	return &movieRepo{
 		data: data,
-		log:  log.NewHelper(logger, log.WithMessageKey("movie repo")),
+		log:  log.NewHelper(logger, log.WithMessageKey("movie data")),
 	}
 }

@@ -27,7 +27,7 @@ type MetadataServiceHTTPServer interface {
 
 func RegisterMetadataServiceHTTPServer(s *http.Server, srv MetadataServiceHTTPServer) {
 	r := s.Route("/")
-	r.GET("/metadata/{id}", _MetadataService_GetMetadata0_HTTP_Handler(srv))
+	r.GET("/metadata/v1/{id}", _MetadataService_GetMetadata0_HTTP_Handler(srv))
 }
 
 func _MetadataService_GetMetadata0_HTTP_Handler(srv MetadataServiceHTTPServer) func(ctx http.Context) error {
@@ -66,7 +66,7 @@ func NewMetadataServiceHTTPClient(client *http.Client) MetadataServiceHTTPClient
 
 func (c *MetadataServiceHTTPClientImpl) GetMetadata(ctx context.Context, in *GetMetadataRequest, opts ...http.CallOption) (*GetMetadataResponse, error) {
 	var out GetMetadataResponse
-	pattern := "/metadata/{id}"
+	pattern := "/metadata/v1/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationMetadataServiceGetMetadata))
 	opts = append(opts, http.PathTemplate(pattern))

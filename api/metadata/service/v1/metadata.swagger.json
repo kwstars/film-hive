@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/metadata/{id}": {
+    "/metadata/v1/{id}": {
       "get": {
         "operationId": "MetadataService_GetMetadata",
         "responses": {
@@ -38,7 +38,8 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "uint64"
           }
         ],
         "tags": [
@@ -80,7 +81,8 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "format": "uint64"
         },
         "title": {
           "type": "string"

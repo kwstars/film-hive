@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/movie/{id}": {
+    "/v1/movie/{id}": {
       "get": {
         "operationId": "MovieService_GetMovieDetail",
         "responses": {
@@ -38,7 +38,8 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "format": "uint64"
           }
         ],
         "tags": [
@@ -52,7 +53,8 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string"
+          "type": "string",
+          "format": "uint64"
         },
         "title": {
           "type": "string"

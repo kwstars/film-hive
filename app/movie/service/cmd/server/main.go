@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"github.com/go-kratos/kratos/contrib/registry/nacos/v2"
@@ -16,6 +17,7 @@ import (
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 	_ "go.uber.org/automaxprocs"
+	"go.uber.org/zap"
 	"gopkg.in/yaml.v2"
 	"os"
 
@@ -56,6 +58,10 @@ func newApp(logger log.Logger, rc naming_client.INamingClient, gs *grpc.Server, 
 			hs,
 		),
 		kratos.Registrar(nacos.New(rc)),
+		kratos.BeforeStart(func(ctx context.Context) error {
+			log.Info("before start: ", zap.String("UserId", "1111"))
+			return nil
+		}),
 	)
 }
 

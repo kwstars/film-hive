@@ -57,10 +57,10 @@ func (m *GetMetadataRequest) validate(all bool) error {
 
 	var errors []error
 
-	if utf8.RuneCountInString(m.GetId()) < 0 {
+	if m.GetId() >= 10 {
 		err := GetMetadataRequestValidationError{
 			field:  "Id",
-			reason: "value length must be at least 0 runes",
+			reason: "value must be less than 10",
 		}
 		if !all {
 			return err

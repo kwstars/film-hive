@@ -2,9 +2,14 @@ package data
 
 import (
 	"context"
+	"github.com/go-redis/cache/v9"
+	"github.com/golang/protobuf/proto"
+	v1 "github.com/kwstars/film-hive/api/rating/service/v1"
+	"github.com/pkg/errors"
+	"gorm.io/gorm"
+	"strconv"
 
 	"github.com/go-kratos/kratos/v2/log"
-	v1 "github.com/kwstars/film-hive/api/rating/service/v1"
 	"github.com/kwstars/film-hive/app/rating/service/internal/biz"
 )
 
@@ -13,43 +18,53 @@ type ratingRepo struct {
 	log  *log.Helper
 }
 
-func (r *ratingRepo) ListRatings(ctx context.Context, recordType, recordID string) (ratings []biz.Rating, err error) {
-	var (
-		ok bool
-		rs []Rating
-	)
-	if _, ok = r.data.rating[recordType]; !ok {
-		return nil, v1.ErrorRatingNotFound("no record of record_type(%s)", recordType)
-	}
-	if rs, ok = r.data.rating[recordType][recordID]; !ok || len(rs) == 0 {
-		return nil, v1.ErrorRatingNotFound("no record of record_type(%s) and record_id(%s)", recordType, recordID)
-	}
-
-	ratings = make([]biz.Rating, 0, len(rs))
-	for _, rating := range rs {
-		t := biz.Rating{
-			RecordID:   rating.RecordID,
-			RecordType: rating.RecordType,
-			UserID:     rating.UserID,
-			Value:      rating.Value,
-		}
-		ratings = append(ratings, t)
+// ListRatings TODO
+func (r *ratingRepo) ListRatings(ctx context.Context, recordType, recordID uint64) (rs []uint32, err error) {
+	key := RatingStringKey + ":" + strconv.FormatUint(recordType, 10) + ":" + strconv.FormatUint(recordID, 10)
+	var ratings = []Rating{}
+	rs = []uint32{}
+	if err = r.data.cache.Once(&cache.Item{
+		Ctx:   ctx,
+		Key:   key,
+		Value: &rs,
+		TTL:   RedisDefaultExpire,
+		Do: func(item *cache.Item) (interface{}, error) {
+			err = r.data.db.Select("value").Find(&ratings, "record_id = ? AND record_type = ?", recordID, recordType).Error
+			if err != nil {
+				switch {
+				case errors.Is(err, gorm.ErrRecordNotFound):
+					return nil, v1.ErrorRatingNotFound("rating was not found, type: %d, id: %d", recordType, recordID)
+				default:
+					return nil, errors.Wrapf(err, "ListRatings failed")
+				}
+			}
+			rs = make([]uint32, 0, len(ratings))
+			for _, v := range ratings {
+				rs = append(rs, v.Value)
+			}
+			return rs, nil
+		},
+		SetNX: true,
+	}); err != nil {
+		return nil, errors.Wrap(err, "ListRatings failed")
 	}
 	return
 }
 
-func (r *ratingRepo) CreateRating(ctx context.Context, recordType, recordID string, rating *biz.Rating) (err error) {
-	t := Rating{
-		RecordID:   rating.RecordID,
-		RecordType: rating.RecordType,
-		UserID:     rating.UserID,
-		Value:      rating.Value,
+// CreateRating 创建评分.
+func (r *ratingRepo) CreateRating(ctx context.Context, uid uint64, rating *biz.Rating) (err error) {
+	key := strconv.FormatUint(uid, 10)
+	tmp := &v1.Rating{
+		RecordType:  v1.RECORDTYPE(rating.RecordType),
+		RecordId:    rating.RecordID,
+		UserId:      rating.UserID,
+		RatingValue: rating.Value,
 	}
-	if _, ok := r.data.rating[recordType]; !ok {
-		r.data.rating[recordType] = map[string][]Rating{}
+	msg, err := proto.Marshal(tmp)
+	if err != nil {
+		return errors.Wrap(err, "CreateRating")
 	}
-	r.data.rating[recordType][recordID] = append(r.data.rating[recordType][recordID], t)
-	return
+	return r.data.PushMsg(key, msg)
 }
 
 // NewRatingRepo .

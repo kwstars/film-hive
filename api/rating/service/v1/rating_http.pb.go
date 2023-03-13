@@ -29,8 +29,8 @@ type RatingServiceHTTPServer interface {
 
 func RegisterRatingServiceHTTPServer(s *http.Server, srv RatingServiceHTTPServer) {
 	r := s.Route("/")
-	r.GET("/rating", _RatingService_GetAggregatedRating0_HTTP_Handler(srv))
-	r.POST("/rating", _RatingService_CreateRating0_HTTP_Handler(srv))
+	r.GET("/v1/rating", _RatingService_GetAggregatedRating0_HTTP_Handler(srv))
+	r.POST("/v1/rating", _RatingService_CreateRating0_HTTP_Handler(srv))
 }
 
 func _RatingService_GetAggregatedRating0_HTTP_Handler(srv RatingServiceHTTPServer) func(ctx http.Context) error {
@@ -86,7 +86,7 @@ func NewRatingServiceHTTPClient(client *http.Client) RatingServiceHTTPClient {
 
 func (c *RatingServiceHTTPClientImpl) CreateRating(ctx context.Context, in *CreateRatingRequest, opts ...http.CallOption) (*CreateRatingResponse, error) {
 	var out CreateRatingResponse
-	pattern := "/rating"
+	pattern := "/v1/rating"
 	path := binding.EncodeURL(pattern, in, false)
 	opts = append(opts, http.Operation(OperationRatingServiceCreateRating))
 	opts = append(opts, http.PathTemplate(pattern))
@@ -99,7 +99,7 @@ func (c *RatingServiceHTTPClientImpl) CreateRating(ctx context.Context, in *Crea
 
 func (c *RatingServiceHTTPClientImpl) GetAggregatedRating(ctx context.Context, in *GetAggregatedRatingRequest, opts ...http.CallOption) (*GetAggregatedRatingResponse, error) {
 	var out GetAggregatedRatingResponse
-	pattern := "/rating"
+	pattern := "/v1/rating"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationRatingServiceGetAggregatedRating))
 	opts = append(opts, http.PathTemplate(pattern))

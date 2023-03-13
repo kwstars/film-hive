@@ -10,7 +10,7 @@ server:
 data:
   database:
     driver: mysql
-    source: "root:mysql@tcp(127.0.0.1:3306)/metadata?charset=utf8mb4&parseTime=True&loc=Local"
+    source: "root:mysql@tcp(127.0.0.1:3306)/movie?charset=utf8mb4&parseTime=True&loc=Local"
   redis:
     addr: 127.0.0.1:6379
     password: "123456"

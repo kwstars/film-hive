@@ -17,15 +17,18 @@ services:
     image: bitnami/kafka:3.4
     restart: always
     ports:
-      - "9092:9092"
+      - '9092:9092'
+      - '9093:9093'
     volumes:
       - "kafka_data:/bitnami"
     environment:
       - KAFKA_BROKER_ID=1
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - KAFKA_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://10.0.0.130:9092 # 宿主机器的IP
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
     depends_on:
       - zookeeper
 
@@ -134,6 +137,16 @@ services:
       - COLLECTOR_OTLP_ENABLED=true
       - LOG_LEVEL=debug
 
+  # Grafana
+  grafana:
+    image: grafana/grafana:latest
+    restart: always
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
 volumes:
   zookeeper_data:
     driver: local

@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/rating": {
+    "/v1/rating": {
       "get": {
         "operationId": "RatingService_GetAggregatedRating",
         "responses": {
@@ -38,13 +38,19 @@
             "name": "record_type",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "RECORDTYPE_UNSPECIFIED",
+              "RECORDTYPE_MOVIE"
+            ],
+            "default": "RECORDTYPE_UNSPECIFIED"
           },
           {
             "name": "record_id",
             "in": "query",
             "required": false,
-            "type": "string"
+            "type": "string",
+            "format": "uint64"
           }
         ],
         "tags": [
@@ -115,18 +121,8 @@
     "v1CreateRatingRequest": {
       "type": "object",
       "properties": {
-        "record_type": {
-          "type": "string"
-        },
-        "record_id": {
-          "type": "string"
-        },
-        "user_id": {
-          "type": "string"
-        },
-        "rating_value": {
-          "type": "integer",
-          "format": "int64"
+        "rating": {
+          "$ref": "#/definitions/v1Rating"
         }
       }
     },
@@ -139,6 +135,34 @@
         "avg_rating": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "v1RECORDTYPE": {
+      "type": "string",
+      "enum": [
+        "RECORDTYPE_UNSPECIFIED",
+        "RECORDTYPE_MOVIE"
+      ],
+      "default": "RECORDTYPE_UNSPECIFIED"
+    },
+    "v1Rating": {
+      "type": "object",
+      "properties": {
+        "record_type": {
+          "$ref": "#/definitions/v1RECORDTYPE"
+        },
+        "record_id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "user_id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "rating_value": {
+          "type": "integer",
+          "format": "int64"
         }
       }
     }

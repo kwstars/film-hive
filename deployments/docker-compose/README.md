@@ -1,4 +1,6 @@
-docker-compose up -d 前需要先创建目录
 ```bash
-mkdir -pv ${HOME}/data/{zookeeper,kafka,mysql,redis}
+# 删除数据
+docker volume rm zookeeper kafka mysql redis
 ```
+
+https://github.com/go-gorm/opentelemetry

@@ -6,10 +6,8 @@ import (
 	v1 "github.com/kwstars/film-hive/api/movie/service/v1"
 	rating "github.com/kwstars/film-hive/api/rating/service/v1"
 	"github.com/kwstars/film-hive/app/movie/service/internal/biz"
-	"golang.org/x/sync/errgroup"
+	"github.com/kwstars/film-hive/pkg/sync/errgroup"
 )
-
-var _ v1.MovieServiceServer = (*MovieService)(nil)
 
 type MovieService struct {
 	v1.UnimplementedMovieServiceServer
@@ -32,14 +30,14 @@ func (m *MovieService) GetMovieDetail(ctx context.Context, req *v1.GetMovieDetai
 		meatdataResp *metadata.GetMetadataResponse
 	)
 
-	eg := new(errgroup.Group)
-	eg.Go(func() (err error) {
-		if ratingResp, err = m.rating.GetAggregatedRating(ctx, &rating.GetAggregatedRatingRequest{RecordType: "1", RecordId: req.GetId()}); err != nil {
+	eg := errgroup.WithContext(ctx)
+	eg.Go(func(ctx context.Context) error {
+		if ratingResp, err = m.rating.GetAggregatedRating(ctx, &rating.GetAggregatedRatingRequest{RecordType: 1, RecordId: req.GetId()}); err != nil {
 			return err
 		}
 		return nil
 	})
-	eg.Go(func() error {
+	eg.Go(func(ctx context.Context) error {
 		if meatdataResp, err = m.metadata.GetMetadata(ctx, &metadata.GetMetadataRequest{Id: req.GetId()}); err != nil {
 			return err
 		}
@@ -52,10 +50,10 @@ func (m *MovieService) GetMovieDetail(ctx context.Context, req *v1.GetMovieDetai
 	resp = &v1.GetMovieDetailResponse{
 		Rating: ratingResp.GetAvgRating(),
 		Metadata: &v1.GetMovieDetailResponse_Metadata{
-			Id:          meatdataResp.Id,
-			Title:       meatdataResp.Title,
-			Description: meatdataResp.Description,
-			Director:    meatdataResp.Director,
+			Id:          meatdataResp.GetId(),
+			Title:       meatdataResp.GetTitle(),
+			Description: meatdataResp.GetDescription(),
+			Director:    meatdataResp.GetDirector(),
 		},
 	}
 	return

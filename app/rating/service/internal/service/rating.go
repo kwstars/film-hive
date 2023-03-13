@@ -6,8 +6,6 @@ import (
 	"github.com/kwstars/film-hive/app/rating/service/internal/biz"
 )
 
-var _ v1.RatingServiceServer = (*RatingService)(nil)
-
 type RatingService struct {
 	v1.UnimplementedRatingServiceServer
 	uc *biz.RatingUsecase
@@ -18,7 +16,7 @@ func NewRatingService(uc *biz.RatingUsecase) *RatingService {
 }
 
 func (r *RatingService) GetAggregatedRating(ctx context.Context, req *v1.GetAggregatedRatingRequest) (resp *v1.GetAggregatedRatingResponse, err error) {
-	ar, err := r.uc.GetAggregatedRating(ctx, req.GetRecordType(), req.GetRecordId())
+	ar, err := r.uc.GetAggregatedRating(ctx, uint64(req.GetRecordType()), req.GetRecordId())
 	if err != nil {
 		return
 	}
@@ -30,10 +28,10 @@ func (r *RatingService) GetAggregatedRating(ctx context.Context, req *v1.GetAggr
 
 func (r *RatingService) CreateRating(ctx context.Context, req *v1.CreateRatingRequest) (resp *v1.CreateRatingResponse, err error) {
 	t := &biz.Rating{
-		RecordID:   req.GetRecordId(),
-		RecordType: req.GetRecordType(),
-		UserID:     req.GetUserId(),
-		Value:      req.GetRatingValue(),
+		RecordID:   req.GetRating().GetRecordId(),
+		RecordType: uint64(req.GetRating().GetRecordType()),
+		UserID:     req.GetRating().GetUserId(),
+		Value:      req.GetRating().GetRatingValue(),
 	}
-	return &v1.CreateRatingResponse{}, r.uc.CreateRating(ctx, req.GetRecordType(), req.GetUserId(), t)
+	return &v1.CreateRatingResponse{}, r.uc.CreateRating(ctx, req.GetRating().GetUserId(), t)
 }

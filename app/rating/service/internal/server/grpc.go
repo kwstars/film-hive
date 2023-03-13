@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/go-kratos/kratos/v2/middleware/logging"
 	v1 "github.com/kwstars/film-hive/api/rating/service/v1"
 	"github.com/kwstars/film-hive/app/rating/service/internal/conf"
 	"github.com/kwstars/film-hive/app/rating/service/internal/service"
@@ -19,7 +20,7 @@ func NewGRPCServer(c *conf.Bootstrap, rating *service.RatingService, logger log.
 		grpc.Middleware(
 			recovery.Recovery(),
 			validate.Validator(),
-			// logging.Server(logger),
+			logging.Server(logger),
 			ratelimit.Server(),
 			tracing.Server(),
 		),

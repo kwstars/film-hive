@@ -27,7 +27,7 @@ type MovieServiceHTTPServer interface {
 
 func RegisterMovieServiceHTTPServer(s *http.Server, srv MovieServiceHTTPServer) {
 	r := s.Route("/")
-	r.GET("/movie/{id}", _MovieService_GetMovieDetail0_HTTP_Handler(srv))
+	r.GET("/v1/movie/{id}", _MovieService_GetMovieDetail0_HTTP_Handler(srv))
 }
 
 func _MovieService_GetMovieDetail0_HTTP_Handler(srv MovieServiceHTTPServer) func(ctx http.Context) error {
@@ -66,7 +66,7 @@ func NewMovieServiceHTTPClient(client *http.Client) MovieServiceHTTPClient {
 
 func (c *MovieServiceHTTPClientImpl) GetMovieDetail(ctx context.Context, in *GetMovieDetailRequest, opts ...http.CallOption) (*GetMovieDetailResponse, error) {
 	var out GetMovieDetailResponse
-	pattern := "/movie/{id}"
+	pattern := "/v1/movie/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationMovieServiceGetMovieDetail))
 	opts = append(opts, http.PathTemplate(pattern))

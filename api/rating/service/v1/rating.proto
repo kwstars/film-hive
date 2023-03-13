@@ -9,38 +9,52 @@ option go_package = "api/rating/service/v1;v1";
 service RatingService {
   rpc GetAggregatedRating (GetAggregatedRatingRequest) returns (GetAggregatedRatingResponse) {
     option (google.api.http) = {
-      get: "/rating"
+      get: "/v1/rating"
     };
   }
   rpc CreateRating (CreateRatingRequest) returns (CreateRatingResponse) {
     option (google.api.http) = {
-      post: "/rating"
+      post: "/v1/rating"
       body: "*"
     };
   }
 }
 
-message Rating {
-  string record_type = 1;
-  string record_id = 2;
-  string user_id = 3;
-  uint32 rating_value = 4;
+enum RECORDTYPE {
+  RECORDTYPE_UNSPECIFIED = 0;
+  RECORDTYPE_MOVIE = 1;
 }
 
 message GetAggregatedRatingRequest {
-  string record_type = 1;
-  string record_id = 2;
+  RECORDTYPE record_type = 1;
+  uint64 record_id = 2;
 }
 
 message GetAggregatedRatingResponse {
   double avg_rating = 1;
 }
 
-message CreateRatingRequest {
-  string record_type = 1;
-  string record_id = 2;
-  string user_id = 3;
+message Rating {
+  RECORDTYPE record_type = 1;
+  uint64 record_id = 2;
+  uint64 user_id = 3;
   uint32 rating_value = 4;
 }
 
+message CreateRatingRequest {
+  Rating  rating = 1;
+}
+
 message CreateRatingResponse{}
+
+
+message PushMsg {
+  enum Type {
+    TYPE_UNSPECIFIED = 0;
+    TYPE_METADATA_CREATE = 1;
+    TYPE_METADATA_DELETE = 2;
+  }
+  Type type = 1;
+  string key = 2;
+  bytes msg = 3;
+}

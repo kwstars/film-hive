@@ -9,11 +9,11 @@ import (
 )
 
 type MetadataRepo interface {
-	GetMetadata(ctx context.Context, id string) (data *Metadata, err error)
+	GetMetadata(ctx context.Context, id uint64) (data *Metadata, err error)
 }
 
 type Metadata struct {
-	ID          string `json:"id"`
+	ID          uint64 `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Director    string `json:"director"`
@@ -27,11 +27,11 @@ type MetadataUsecase struct {
 func NewMetadataUsecase(repo MetadataRepo, logger log.Logger) *MetadataUsecase {
 	return &MetadataUsecase{
 		repo: repo,
-		log:  log.NewHelper(logger, log.WithMessageKey("metadata")),
+		log:  log.NewHelper(logger, log.WithMessageKey("metadata data")),
 	}
 }
 
-func (mu *MetadataUsecase) GetMetadata(ctx context.Context, id string) (metadata *Metadata, err error) {
+func (mu *MetadataUsecase) GetMetadata(ctx context.Context, id uint64) (metadata *Metadata, err error) {
 	data, err := mu.repo.GetMetadata(ctx, id)
 	if err != nil {
 		switch {

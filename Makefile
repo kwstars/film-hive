@@ -15,7 +15,7 @@ init:
 	go install github.com/google/wire/cmd/wire@latest
 	go install github.com/envoyproxy/protoc-gen-validate@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-	go install github.com/golang/mock/mockgen@v1.6.0
+	go install github.com/vektra/mockery/v2@latest
 
 ifeq ($(GOHOSTOS), windows)
         #the `find.exe` is different from `find` in bash/shell.
@@ -81,3 +81,8 @@ wire:
 .PHONY: docker
 docker:
 	find app -maxdepth 2 -mindepth 2 -type d -print | xargs -L 1 bash -c 'cd "$$0" && pwd && $(MAKE) docker'
+
+
+.PHONY: test
+test:
+	go test -race ./app/...

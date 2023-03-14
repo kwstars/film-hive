@@ -4,8 +4,9 @@ import (
 	"context"
 
 	"github.com/go-kratos/kratos/v2/log"
-	v1 "github.com/kwstars/film-hive/api/movie/service/v1"
-	"github.com/pkg/errors"
+	metadata "github.com/kwstars/film-hive/api/metadata/service/v1"
+	rating "github.com/kwstars/film-hive/api/rating/service/v1"
+	"github.com/kwstars/film-hive/pkg/sync/errgroup"
 )
 
 type MovieRepo interface {
@@ -13,46 +14,54 @@ type MovieRepo interface {
 	CreateMovie(ctx context.Context, recordType, recordID string, movie *Movie) (err error)
 }
 
-type Movie struct {
-	RecordID   string `json:"recordId"`
-	RecordType string `json:"recordType"`
-	UserID     string `json:"userId"`
-	Value      uint32 `json:"value"`
-}
-
 type MovieUsecase struct {
 	repo MovieRepo
 	log  *log.Helper
+	mc   metadata.MetadataServiceClient
+	rc   rating.RatingServiceClient
 }
 
-func NewMovieUsecase(repo MovieRepo, logger log.Logger) *MovieUsecase {
+func NewMovieUsecase(mc metadata.MetadataServiceClient, rc rating.RatingServiceClient, repo MovieRepo, logger log.Logger) *MovieUsecase {
 	return &MovieUsecase{
 		repo: repo,
 		log:  log.NewHelper(logger, log.WithMessageKey("movie biz")),
+		mc:   mc,
+		rc:   rc,
 	}
 }
 
-// GetAggregatedMovie 获取平局的评分
-func (c *MovieUsecase) GetAggregatedMovie(ctx context.Context, recordType, recordID string) (ar float64, err error) {
-	movies, err := c.repo.ListMovies(ctx, recordType, recordID)
-	if err != nil {
-		switch {
-		case v1.IsMovieNotFound(err):
-			c.log.Errorf("GetAggregatedMovie movie not found: %v", err)
-			return
-		default:
-			c.log.Errorf("ListMovie err: %v", err)
-			return 0, errors.New("unknown error")
+func (m *MovieUsecase) GetMovieDetail(ctx context.Context, ID uint64) (resp *MovieDetail, err error) {
+	var (
+		ratingResp   *rating.GetAggregatedRatingResponse
+		metadataResp *metadata.GetMetadataResponse
+	)
+
+	eg := errgroup.WithContext(ctx)
+	eg.Go(func(ctx context.Context) error {
+		if ratingResp, err = m.rc.GetAggregatedRating(ctx, &rating.GetAggregatedRatingRequest{RecordType: 1, RecordId: ID}); err != nil {
+			log.Errorf("rating service failed, id: %d, %v", ID, err)
+			return err
 		}
+		return nil
+	})
+	eg.Go(func(ctx context.Context) error {
+		if metadataResp, err = m.mc.GetMetadata(ctx, &metadata.GetMetadataRequest{Id: ID}); err != nil {
+			log.Errorf("metadata service failed, id: %d, %v", ID, err)
+			return err
+		}
+		return nil
+	})
+	if err = eg.Wait(); err != nil {
+		return
 	}
-	sum := float64(0)
-	for _, r := range movies {
-		sum += float64(r.Value)
-	}
-	return sum / float64(len(movies)), nil
-}
 
-// CreateMovie 添加一个评分
-func (c *MovieUsecase) CreateMovie(ctx context.Context, recordType, recordID string, movie *Movie) error {
-	return c.repo.CreateMovie(ctx, recordType, recordID, movie)
+	return &MovieDetail{
+		Rating: ratingResp.GetAvgRating(),
+		Metadata: &Metadata{
+			ID:          metadataResp.GetId(),
+			Title:       metadataResp.GetTitle(),
+			Description: metadataResp.GetDescription(),
+			Director:    metadataResp.GetDirector(),
+		},
+	}, nil
 }

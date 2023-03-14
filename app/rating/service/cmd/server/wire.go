@@ -6,16 +6,14 @@
 package main
 
 import (
+	"github.com/go-kratos/kratos/v2"
+	"github.com/google/wire"
 	"github.com/kwstars/film-hive/app/rating/service/internal/biz"
 	"github.com/kwstars/film-hive/app/rating/service/internal/conf"
 	"github.com/kwstars/film-hive/app/rating/service/internal/data"
 	"github.com/kwstars/film-hive/app/rating/service/internal/server"
 	"github.com/kwstars/film-hive/app/rating/service/internal/service"
-
-	"github.com/google/wire"
 	"go.opentelemetry.io/otel/sdk/trace"
-
-	"github.com/go-kratos/kratos/v2"
 )
 
 // initApp init kratos application.

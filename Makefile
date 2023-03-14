@@ -85,4 +85,4 @@ docker:
 
 .PHONY: test
 test:
-	go test -race ./app/...
+	find app -maxdepth 2 -mindepth 2 -type d -print | xargs -L 1 bash -c 'cd "$$0" && pwd && $(MAKE) test'

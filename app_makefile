@@ -75,7 +75,7 @@ build:
 .PHONY: test
 # test
 test:
-	go test -v ./... -cover
+	go test -race ./... -cover
 
 .PHONY: run
 run:

@@ -10,7 +10,6 @@ import (
 	"github.com/kwstars/film-hive/app/rating/service/internal/biz"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
-	"gorm.io/gorm"
 )
 
 type ratingRepo struct {
@@ -31,12 +30,10 @@ func (r *ratingRepo) ListRatings(ctx context.Context, recordType, recordID uint6
 		Do: func(item *cache.Item) (interface{}, error) {
 			err = r.data.db.Select("value").Find(&ratings, "record_id = ? AND record_type = ?", recordID, recordType).Error
 			if err != nil {
-				switch {
-				case errors.Is(err, gorm.ErrRecordNotFound):
-					return nil, v1.ErrorRatingNotFound("rating was not found, type: %d, id: %d", recordType, recordID)
-				default:
-					return nil, errors.Wrapf(err, "ListRatings failed")
-				}
+				return nil, errors.Wrapf(err, "ListRatings failed")
+			}
+			if len(ratings) == 0 {
+				return nil, v1.ErrorRatingNotFound("Type: %d, ID: %d", recordType, recordID)
 			}
 			rs = make([]uint32, 0, len(ratings))
 			for _, v := range ratings {

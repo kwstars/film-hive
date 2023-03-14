@@ -29,12 +29,12 @@ func initApp(bootstrap *conf.Bootstrap) (*kratos.App, func(), error) {
 		cleanup()
 		return nil, nil, err
 	}
-	ratingServiceClient, cleanup2, err := service.NewRatingGRPCClient(bootstrap, iNamingClient)
+	metadataServiceClient, cleanup2, err := service.NewMetadataGRPCClient(bootstrap, iNamingClient)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	metadataServiceClient, cleanup3, err := service.NewMetadataGRPCClient(bootstrap, iNamingClient)
+	ratingServiceClient, cleanup3, err := service.NewRatingGRPCClient(bootstrap, iNamingClient)
 	if err != nil {
 		cleanup2()
 		cleanup()
@@ -48,8 +48,8 @@ func initApp(bootstrap *conf.Bootstrap) (*kratos.App, func(), error) {
 		return nil, nil, err
 	}
 	movieRepo := data.NewMovieRepo(dataData, logger)
-	movieUsecase := biz.NewMovieUsecase(movieRepo, logger)
-	movieService := service.NewMovieService(ratingServiceClient, metadataServiceClient, movieUsecase)
+	movieUsecase := biz.NewMovieUsecase(metadataServiceClient, ratingServiceClient, movieRepo, logger)
+	movieService := service.NewMovieService(movieUsecase)
 	grpcServer := server.NewGRPCServer(bootstrap, movieService, logger)
 	httpServer := server.NewHTTPServer(bootstrap, movieService, logger)
 	app := newApp(logger, iNamingClient, grpcServer, httpServer)

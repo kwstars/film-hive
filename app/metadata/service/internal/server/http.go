@@ -13,7 +13,7 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
-func NewHTTPServer(c *conf.Bootstrap, metadata *service.MetadataService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, metadata *service.MetadataService, _ log.Logger) *http.Server {
 	opts := []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),

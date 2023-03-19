@@ -12,7 +12,7 @@ import (
 	"github.com/go-kratos/kratos/v2/registry"
 )
 
-func NewNamingClient(c *conf.Bootstrap) (rr registry.Registrar, err error) {
+func NewNamingClient(_ *conf.Bootstrap) (rr registry.Registrar, err error) {
 	// create ServerConfig
 	sc := []constant.ServerConfig{
 		*constant.NewServerConfig("127.0.0.1", 8848, constant.WithContextPath("/nacos")),

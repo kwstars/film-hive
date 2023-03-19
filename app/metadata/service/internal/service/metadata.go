@@ -23,7 +23,7 @@ func (m *MetadataService) GetMetadata(ctx context.Context, req *v1.GetMetadataRe
 	}
 
 	resp = &v1.GetMetadataResponse{
-		Id:          metadata.ID,
+		Id:          metadata.Id,
 		Title:       metadata.Title,
 		Description: metadata.Description,
 		Director:    metadata.Director,

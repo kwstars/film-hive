@@ -15,7 +15,7 @@ type Data struct {
 }
 
 // NewData .
-func NewData(c *conf.Bootstrap, _ log.Logger) (data *Data, closer func(), err error) {
+func NewData(_ *conf.Bootstrap, _ log.Logger) (data *Data, closer func(), err error) {
 	d := map[string]map[string][]Movie{
 		"1": {"1": {{RecordID: "1", RecordType: "1", UserID: "1", Value: 1}, {RecordID: "3", RecordType: "3", UserID: "3", Value: 3}}},
 		"2": {"2": {{RecordID: "2", RecordType: "2", UserID: "2", Value: 2}}},

@@ -38,7 +38,7 @@ func (m *metadataRepo) GetMetadata(ctx context.Context, id uint64) (data *biz.Me
 				}
 			}
 			data = &biz.Metadata{
-				ID:          metadata.ID,
+				Id:          metadata.ID,
 				Title:       metadata.Title,
 				Description: metadata.Description,
 				Director:    metadata.Director,

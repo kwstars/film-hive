@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-func fakeRunTask(ctx context.Context) error {
+func fakeRunTask(_ context.Context) error {
 	return nil
 }
 
@@ -12,7 +12,7 @@ func ExampleGroup_group() {
 	g := Group{}
 	g.Go(fakeRunTask)
 	g.Go(fakeRunTask)
-	if err := g.Wait(); err != nil {
+	if err := g.Wait(); err != nil { //nolint:all
 		// handle err
 	}
 }
@@ -21,7 +21,7 @@ func ExampleGroup_ctx() {
 	g := WithContext(context.Background())
 	g.Go(fakeRunTask)
 	g.Go(fakeRunTask)
-	if err := g.Wait(); err != nil {
+	if err := g.Wait(); err != nil { //nolint:all
 		// handle err
 	}
 }
@@ -30,7 +30,7 @@ func ExampleGroup_cancel() {
 	g := WithCancel(context.Background())
 	g.Go(fakeRunTask)
 	g.Go(fakeRunTask)
-	if err := g.Wait(); err != nil {
+	if err := g.Wait(); err != nil { //nolint:all
 		// handle err
 	}
 }
@@ -41,7 +41,7 @@ func ExampleGroup_maxproc() {
 	g.GOMAXPROCS(2)
 	g.Go(fakeRunTask)
 	g.Go(fakeRunTask)
-	if err := g.Wait(); err != nil {
+	if err := g.Wait(); err != nil { //nolint:all
 		// handle err
 	}
 }

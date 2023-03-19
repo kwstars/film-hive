@@ -1,0 +1,10 @@
+syntax = "proto3";
+package metadata.service.biz;
+option go_package = "metadata/service/internal/biz;biz";
+
+message Metadata {
+  uint64 id = 1;
+  string title = 2;
+  string description = 3;
+  string director = 4;
+}

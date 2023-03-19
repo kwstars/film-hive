@@ -13,7 +13,7 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/clients/naming_client"
 )
 
-func NewMetadataGRPCClient(c *conf.Bootstrap, rc naming_client.INamingClient) (metadata.MetadataServiceClient, func(), error) {
+func NewMetadataGRPCClient(_ *conf.Bootstrap, rc naming_client.INamingClient) (metadata.MetadataServiceClient, func(), error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	conn, err := grpc.DialInsecure(

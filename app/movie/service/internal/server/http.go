@@ -14,7 +14,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, movie *service.MovieService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, movie *service.MovieService, _ log.Logger) *http.Server {
 	opts := []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),

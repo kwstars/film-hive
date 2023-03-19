@@ -49,7 +49,7 @@ func (r *ratingRepo) ListRatings(ctx context.Context, recordType, recordID uint6
 }
 
 // CreateRating 创建评分.
-func (r *ratingRepo) CreateRating(ctx context.Context, uid uint64, rating *biz.Rating) (err error) {
+func (r *ratingRepo) CreateRating(_ context.Context, uid uint64, rating *biz.Rating) (err error) {
 	key := strconv.FormatUint(uid, 10)
 	tmp := &v1.Rating{
 		RecordType:  v1.RECORDTYPE(rating.RecordType),

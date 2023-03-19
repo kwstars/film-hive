@@ -14,7 +14,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Bootstrap, movie *service.MovieService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Bootstrap, movie *service.MovieService, _ log.Logger) *grpc.Server {
 	opts := []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),

@@ -3,8 +3,8 @@
 
 openapi: 3.0.3
 info:
-  title: ""
-  version: 0.0.1
-paths: { }
+    title: ""
+    version: 0.0.1
+paths: {}
 components:
-  schemas: { }
+    schemas: {}

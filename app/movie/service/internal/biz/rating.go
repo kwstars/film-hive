@@ -10,7 +10,7 @@ import (
 )
 
 type MovieRepo interface {
-	ListMovies(ctx context.Context, recordType, recordID string) (movies []Movie, err error)
+	ListMovies(ctx context.Context, recordType, recordID string) (movies []*Movie, err error)
 	CreateMovie(ctx context.Context, recordType, recordID string, movie *Movie) (err error)
 }
 
@@ -58,7 +58,7 @@ func (m *MovieUsecase) GetMovieDetail(ctx context.Context, ID uint64) (resp *Mov
 	return &MovieDetail{
 		Rating: ratingResp.GetAvgRating(),
 		Metadata: &Metadata{
-			ID:          metadataResp.GetId(),
+			Id:          metadataResp.GetId(),
 			Title:       metadataResp.GetTitle(),
 			Description: metadataResp.GetDescription(),
 			Director:    metadataResp.GetDirector(),

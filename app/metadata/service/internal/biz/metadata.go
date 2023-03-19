@@ -8,19 +8,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-//go:generate mockgen -package biz -destination metadata_mock.go -source metadata.go MetadataRepo
+////go:generate mockgen -package biz -destination metadata_mock.go -source metadata.go MetadataRepo
 
 type MetadataRepo interface {
 	GetMetadata(ctx context.Context, id uint64) (data *Metadata, err error)
 }
-
-type Metadata struct {
-	ID          uint64 `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Director    string `json:"director"`
-}
-
 type MetadataUsecase struct {
 	repo MetadataRepo
 	log  *log.Helper

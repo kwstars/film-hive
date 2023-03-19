@@ -13,7 +13,7 @@ type movieRepo struct {
 	log  *log.Helper
 }
 
-func (r *movieRepo) ListMovies(ctx context.Context, recordType, recordID string) (movies []biz.Movie, err error) {
+func (r *movieRepo) ListMovies(_ context.Context, recordType, recordID string) (movies []*biz.Movie, err error) {
 	var (
 		ok bool
 		rs []Movie
@@ -25,12 +25,12 @@ func (r *movieRepo) ListMovies(ctx context.Context, recordType, recordID string)
 		return nil, v1.ErrorMovieNotFound("no record of record_type(%s) and record_id(%s)", recordType, recordID)
 	}
 
-	movies = make([]biz.Movie, 0, len(rs))
+	movies = make([]*biz.Movie, 0, len(rs))
 	for _, movie := range rs {
-		t := biz.Movie{
-			RecordID:   movie.RecordID,
+		t := &biz.Movie{
+			RecordId:   movie.RecordID,
 			RecordType: movie.RecordType,
-			UserID:     movie.UserID,
+			UserId:     movie.UserID,
 			Value:      movie.Value,
 		}
 		movies = append(movies, t)
@@ -38,11 +38,11 @@ func (r *movieRepo) ListMovies(ctx context.Context, recordType, recordID string)
 	return
 }
 
-func (r *movieRepo) CreateMovie(ctx context.Context, recordType, recordID string, movie *biz.Movie) (err error) {
+func (r *movieRepo) CreateMovie(_ context.Context, recordType, recordID string, movie *biz.Movie) (err error) {
 	t := Movie{
-		RecordID:   movie.RecordID,
+		RecordID:   movie.RecordId,
 		RecordType: movie.RecordType,
-		UserID:     movie.UserID,
+		UserID:     movie.UserId,
 		Value:      movie.Value,
 	}
 	if _, ok := r.data.movie[recordType]; !ok {

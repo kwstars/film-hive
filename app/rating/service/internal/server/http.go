@@ -13,7 +13,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Bootstrap, rating *service.RatingService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Bootstrap, rating *service.RatingService, _ log.Logger) *http.Server {
 	opts := []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),

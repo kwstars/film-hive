@@ -24,7 +24,7 @@ func (m *MovieService) GetMovieDetail(ctx context.Context, req *v1.GetMovieDetai
 	resp = &v1.GetMovieDetailResponse{
 		Rating: movieDetail.Rating,
 		Metadata: &v1.GetMovieDetailResponse_Metadata{
-			Id:          movieDetail.Metadata.ID,
+			Id:          movieDetail.Metadata.Id,
 			Title:       movieDetail.Metadata.Title,
 			Description: movieDetail.Metadata.Description,
 			Director:    movieDetail.Metadata.Director,

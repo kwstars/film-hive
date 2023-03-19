@@ -58,7 +58,7 @@ func (m *MovieUsecase) GetMovieDetail(ctx context.Context, ID uint64) (resp *Mov
 	return &MovieDetail{
 		Rating: ratingResp.GetAvgRating(),
 		Metadata: &Metadata{
-			ID:          metadataResp.GetId(),
+			Id:          metadataResp.GetId(),
 			Title:       metadataResp.GetTitle(),
 			Description: metadataResp.GetDescription(),
 			Director:    metadataResp.GetDirector(),

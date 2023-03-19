@@ -1,0 +1,23 @@
+syntax = "proto3";
+package movie.service.biz;
+option go_package = "movie/service/internal/biz;biz";
+
+
+message Metadata {
+  uint64 id = 1;
+  string title = 2;
+  string description = 3;
+  string director = 4;
+}
+
+message MovieDetail {
+  double rating = 1;
+  Metadata metadata = 2;
+}
+
+message Movie {
+  string record_id = 1;
+  string record_type = 2;
+  string user_id = 3;
+  uint32 value = 4;
+}

@@ -28,9 +28,9 @@ func (r *movieRepo) ListMovies(ctx context.Context, recordType, recordID string)
 	movies = make([]biz.Movie, 0, len(rs))
 	for _, movie := range rs {
 		t := biz.Movie{
-			RecordID:   movie.RecordID,
+			RecordId:   movie.RecordID,
 			RecordType: movie.RecordType,
-			UserID:     movie.UserID,
+			UserId:     movie.UserID,
 			Value:      movie.Value,
 		}
 		movies = append(movies, t)
@@ -40,9 +40,9 @@ func (r *movieRepo) ListMovies(ctx context.Context, recordType, recordID string)
 
 func (r *movieRepo) CreateMovie(ctx context.Context, recordType, recordID string, movie *biz.Movie) (err error) {
 	t := Movie{
-		RecordID:   movie.RecordID,
+		RecordID:   movie.RecordId,
 		RecordType: movie.RecordType,
-		UserID:     movie.UserID,
+		UserID:     movie.UserId,
 		Value:      movie.Value,
 	}
 	if _, ok := r.data.movie[recordType]; !ok {

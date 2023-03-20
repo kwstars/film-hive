@@ -3,7 +3,7 @@ module github.com/kwstars/film-hive
 go 1.19
 
 require (
-	github.com/envoyproxy/protoc-gen-validate v0.9.1
+	github.com/envoyproxy/protoc-gen-validate v0.10.0
 	github.com/go-kratos/kratos/contrib/config/nacos/v2 v2.0.0-20230309161611-7eca8f803405
 	github.com/go-kratos/kratos/contrib/registry/nacos/v2 v2.0.0-20230309161611-7eca8f803405
 	github.com/go-kratos/kratos/v2 v2.6.1
@@ -21,8 +21,8 @@ require (
 	go.opentelemetry.io/otel/sdk v1.14.0
 	go.uber.org/automaxprocs v1.5.1
 	go.uber.org/zap v1.24.0
-	google.golang.org/genproto v0.0.0-20230306155012-7f2fa6fef1f4
-	google.golang.org/grpc v1.53.0
+	google.golang.org/genproto v0.0.0-20221118155620-16455021b5e6
+	google.golang.org/grpc v1.53.0-dev
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/Shopify/sarama.v1 v1.20.1
 	gopkg.in/yaml.v2 v2.4.0

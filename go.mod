@@ -9,7 +9,7 @@ require (
 	github.com/go-kratos/kratos/v2 v2.6.1
 	github.com/go-redis/cache/v9 v9.0.0
 	github.com/go-redsync/redsync/v4 v4.8.1
-	github.com/golang/protobuf v1.5.2
+	github.com/golang/protobuf v1.5.3
 	github.com/google/wire v0.5.0
 	github.com/nacos-group/nacos-sdk-go v1.0.9
 	github.com/pkg/errors v0.9.1

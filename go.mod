@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/confluentinc/confluent-kafka-go/v2 v2.1.0
-	github.com/envoyproxy/protoc-gen-validate v0.10.0
+	github.com/envoyproxy/protoc-gen-validate v0.10.1
 	github.com/go-kratos/kratos/contrib/config/nacos/v2 v2.0.0-20230309161611-7eca8f803405
 	github.com/go-kratos/kratos/contrib/registry/nacos/v2 v2.0.0-20230309161611-7eca8f803405
 	github.com/go-kratos/kratos/v2 v2.6.1

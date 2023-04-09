@@ -14,7 +14,6 @@ init:
 	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest
 	go install github.com/google/wire/cmd/wire@latest
 	go install github.com/envoyproxy/protoc-gen-validate@latest
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 	go install github.com/vektra/mockery/v2@latest
 
 ifeq ($(GOHOSTOS), windows)
@@ -53,12 +52,13 @@ buf:
 .PHONY: lint
 # lint
 lint:
-	golangci-lint run -v
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	golangci-lint run
 
 .PHONY: lint-fix
 # lint-fix
 lint-fix:
-	golangci-lint run --concurrency=2 --fix --timeout 1m
+	golangci-lint run --concurrency=4 --fix --timeout 1m
 
 .PHONY: generate
 # generate client code

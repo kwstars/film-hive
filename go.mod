@@ -3,6 +3,7 @@ module github.com/kwstars/film-hive
 go 1.19
 
 require (
+	github.com/confluentinc/confluent-kafka-go/v2 v2.1.0
 	github.com/envoyproxy/protoc-gen-validate v0.10.0
 	github.com/go-kratos/kratos/contrib/config/nacos/v2 v2.0.0-20230309161611-7eca8f803405
 	github.com/go-kratos/kratos/contrib/registry/nacos/v2 v2.0.0-20230309161611-7eca8f803405
@@ -21,8 +22,8 @@ require (
 	go.opentelemetry.io/otel/sdk v1.14.0
 	go.uber.org/automaxprocs v1.5.2
 	go.uber.org/zap v1.24.0
-	google.golang.org/genproto v0.0.0-20221118155620-16455021b5e6
-	google.golang.org/grpc v1.53.0-dev
+	google.golang.org/genproto v0.0.0-20230331144136-dcfb400f0633
+	google.golang.org/grpc v1.54.0
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/Shopify/sarama.v1 v1.20.1
 	gopkg.in/yaml.v2 v2.4.0
@@ -61,13 +62,12 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af // indirect
-	github.com/json-iterator/go v1.1.11 // indirect
-	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/klauspost/compress v1.15.9 // indirect
 	github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f // indirect
 	github.com/lestrrat/go-strftime v0.0.0-20180220042222-ba3bf9c1d042 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
-	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pierrec/lz4 v2.6.1+incompatible // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475 // indirect
@@ -87,8 +87,7 @@ require (
 	golang.org/x/sync v0.1.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
-	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
-	gopkg.in/ini.v1 v1.42.0 // indirect
+	gopkg.in/ini.v1 v1.51.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/sqlite v1.4.3 // indirect
 )

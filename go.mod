@@ -18,7 +18,7 @@ require (
 	github.com/redis/go-redis/v9 v9.0.4
 	github.com/stretchr/testify v1.8.2
 	go.opentelemetry.io/otel v1.15.1
-	go.opentelemetry.io/otel/exporters/jaeger v1.14.0
+	go.opentelemetry.io/otel/exporters/jaeger v1.15.1
 	go.opentelemetry.io/otel/sdk v1.15.1
 	go.uber.org/automaxprocs v1.5.2
 	go.uber.org/zap v1.24.0

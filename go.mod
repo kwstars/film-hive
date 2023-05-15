@@ -3,7 +3,7 @@ module github.com/kwstars/film-hive
 go 1.19
 
 require (
-	github.com/confluentinc/confluent-kafka-go/v2 v2.1.0
+	github.com/confluentinc/confluent-kafka-go/v2 v2.1.1
 	github.com/envoyproxy/protoc-gen-validate v1.0.0
 	github.com/go-kratos/kratos/contrib/config/nacos/v2 v2.0.0-20230309161611-7eca8f803405
 	github.com/go-kratos/kratos/contrib/registry/nacos/v2 v2.0.0-20230309161611-7eca8f803405

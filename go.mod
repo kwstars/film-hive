@@ -27,8 +27,8 @@ require (
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/Shopify/sarama.v1 v1.20.1
 	gopkg.in/yaml.v2 v2.4.0
-	gorm.io/driver/mysql v1.5.0
-	gorm.io/gorm v1.25.0
+	gorm.io/driver/mysql v1.5.1
+	gorm.io/gorm v1.25.1
 	gorm.io/plugin/opentelemetry v0.1.1
 )
 

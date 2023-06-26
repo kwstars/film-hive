@@ -22,8 +22,8 @@ require (
 	go.opentelemetry.io/otel/sdk v1.15.1
 	go.uber.org/automaxprocs v1.5.2
 	go.uber.org/zap v1.24.0
-	google.golang.org/genproto v0.0.0-20230331144136-dcfb400f0633
-	google.golang.org/grpc v1.54.0
+	google.golang.org/genproto v0.0.0-20230410155749-daa745c078e1
+	google.golang.org/grpc v1.56.1
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/Shopify/sarama.v1 v1.20.1
 	gopkg.in/yaml.v2 v2.4.0

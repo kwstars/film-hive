@@ -16,7 +16,7 @@ jobs:
     name: lint
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Go Lint
         uses: golangci/golangci-lint-action@v3
         with:

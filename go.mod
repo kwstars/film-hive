@@ -16,20 +16,20 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/redis/go-redis/extra/redisotel/v9 v9.0.2
 	github.com/redis/go-redis/v9 v9.0.4
-	github.com/stretchr/testify v1.8.2
-	go.opentelemetry.io/otel v1.15.1
+	github.com/stretchr/testify v1.8.3
+	go.opentelemetry.io/otel v1.16.0
 	go.opentelemetry.io/otel/exporters/jaeger v1.15.1
-	go.opentelemetry.io/otel/sdk v1.15.1
+	go.opentelemetry.io/otel/sdk v1.16.0
 	go.uber.org/automaxprocs v1.5.2
 	go.uber.org/zap v1.24.0
-	google.golang.org/genproto/googleapis/api v0.0.0-20230525234035-dd9d682886f9
+	google.golang.org/genproto/googleapis/api v0.0.0-20230526161137-0005af68ea54
 	google.golang.org/grpc v1.57.0
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/Shopify/sarama.v1 v1.20.1
 	gopkg.in/yaml.v2 v2.4.0
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/gorm v1.25.1
-	gorm.io/plugin/opentelemetry v0.1.1
+	gorm.io/plugin/opentelemetry v0.1.4
 )
 
 require (
@@ -81,17 +81,16 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.3.4 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/yusufpapurcu/wmi v1.2.2 // indirect
-	go.opentelemetry.io/otel/metric v0.36.0 // indirect
-	go.opentelemetry.io/otel/trace v1.15.1 // indirect
+	go.opentelemetry.io/otel/metric v1.16.0 // indirect
+	go.opentelemetry.io/otel/trace v1.16.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
-	go.uber.org/multierr v1.9.0 // indirect
-	golang.org/x/net v0.9.0 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
+	golang.org/x/net v0.10.0 // indirect
 	golang.org/x/sync v0.1.0 // indirect
-	golang.org/x/sys v0.7.0 // indirect
+	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/genproto v0.0.0-20230526161137-0005af68ea54 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20230525234030-28d5490b6b19 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20230526161137-0005af68ea54 // indirect
 	gopkg.in/ini.v1 v1.51.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/sqlite v1.4.3 // indirect
 )

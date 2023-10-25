@@ -23,7 +23,7 @@ require (
 	go.uber.org/automaxprocs v1.5.2
 	go.uber.org/zap v1.24.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20230525234035-dd9d682886f9
-	google.golang.org/grpc v1.57.0
+	google.golang.org/grpc v1.57.1
 	google.golang.org/protobuf v1.30.0
 	gopkg.in/Shopify/sarama.v1 v1.20.1
 	gopkg.in/yaml.v2 v2.4.0
